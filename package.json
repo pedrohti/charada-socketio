@@ -1,0 +1,22 @@
+{
+	"name": "charada-socketio",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"start": "nodemon server.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"nodemon": "^2.0.6"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"http": "0.0.1-security",
+		"socket.io": "^2.3.0",
+		"tmi.js": "^1.5.0"
+	}
+}
