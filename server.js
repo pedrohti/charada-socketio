@@ -1,29 +1,29 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const chat = require("./src/settings/chat");
 
-const botConfig = require("./botConfig");
-const tmi = require("tmi.js");
-const client = new tmi.Client(botConfig);
+http.setMaxListeners(100);
 
-client.connect();
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
+app.use("/", require("./src/routes"));
+app.use(express.static(__dirname + "/src/chat"));
 
-// app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
+var botList = ["stickroboto", "nightbot", "streamholics", "streamelements"];
+var wordList = ["mongol", "mongoloide", "mongoloid"];
 
-client.on("message", (channel, tags, message, self) => {
-	//io.emit('pede charada', "Bem vindo! "); <== vou usar pra enviar a charada
-	// client.say(channel, "Teste de CSS! PogChamp").catch(console.error); // add error handling here
-	io.emit('pede charada', channel, message)
+io.on("connection", function (socket) {
+	chat.on("message", (channel, tags, message, self) => {
+		var foundBot = botList.includes(tags.username);
+
+		if (self || foundBot) return;
+
+		io.emit("chat message", tags.username, message);
+	});
 });
 
-io.on('connection', (socket) => {
-	console.log('IO Connected');
-});
-
-io.on('pede charada', (channel, msg) => {
-	client.say(channel, msg)
-})
-
-http.listen(PORT, () => console.log("http://localhost:" + PORT));
+http.listen(process.env.SERVER_PORT, () =>
+	console.log("http://localhost:" + process.env.SERVER_PORT),
+);

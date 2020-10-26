@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+			integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+			crossorigin="anonymous"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link href="./index.css" rel="stylesheet" type="text/css" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+			integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"
+			integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ=="
+			crossorigin="anonymous"
+		></script>
+		<title>Webchat com socketIO</title>
+	</head>
+	<body>
+		<div class="container">
+			<!-- <ul class="ul" id="messages">
+				<li class="usuario">usuario usuario usuario usuario usuario usuario usuario usuario </li>
+				<li class="mensagem speech-bubble">
+					gaulesCareca
+				</li>
+			</ul> -->
+
+			<div class="messages"></div>
+
+			<table id="tbMsg"></table>
+		</div>
+
+		<script>
+			function pageScroll() {
+				window.scrollBy(0, 1);
+				scrolldelay = setTimeout(pageScroll, 10);
+			}
+
+			// inicia o client socketIO
+			var socket = io();
+			// sempre que receber uma mensagem ela é adicionada a lista
+			socket.on("chat message", function (user, msg) {
+				var randomColor = Math.floor(Math.random() * 16777215).toString(
+					16,
+				);
+				var html = "";
+
+				// html = `<tr><td class="usuario">${user}:</td><td class="msg">${msg}</td></tr>`;
+				// $("#tbMsg").append(html);
+
+				// html = `<li><ul class="usuario">${user}</ul><ul class="mensagem">${msg}</ul></li>`;
+				html = `<div class="usuario"><p class="nick">${user}</p></div><div class="mensagem speech-bubble"><p class="msg">${msg}</p></div>`;
+				// li.appendChild(document.createTextNode(html));
+				// adicionar o nome do usuário quebra a linha e adicionar a mensagem à lista de mensagems
+				// ul.appendChild(li);
+				$(".messages").append(html);
+				pageScroll();
+			});
+		</script>
+	</body>
+</html>
